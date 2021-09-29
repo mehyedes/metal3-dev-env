@@ -44,7 +44,7 @@ EOF
     sudo virsh pool-autostart default
 fi
 
-if [[ $OS == ubuntu ]]; then
+if [[ $OS =~ (ubuntu|manjaro) ]]; then
   # source ubuntu_bridge_network_configuration.sh
   # shellcheck disable=SC1091
   source ubuntu_bridge_network_configuration.sh
@@ -209,7 +209,7 @@ sudo "${CONTAINER_RUNTIME}" run -d --net host --name vbmc ${POD_NAME_INFRA} \
      "${VBMC_IMAGE}"
 
 #shellcheck disable=SC2086
-sudo "${CONTAINER_RUNTIME}" run -d --net host --name sushy-tools ${POD_NAME_INFRA} \
+sudo "${CONTAINER_RUNTIME}" run -e SUSHY_EMULATOR_LISTEN_IP='192.168.111.1' -d --net host --name sushy-tools ${POD_NAME_INFRA} \
      -v "$WORKING_DIR/virtualbmc/sushy-tools":/root/sushy -v "/root/.ssh":/root/ssh \
      "${SUSHY_TOOLS_IMAGE}"
 

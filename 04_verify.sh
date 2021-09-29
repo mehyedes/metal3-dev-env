@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -u
+# set -u
 
 # shellcheck disable=SC1091
 source lib/logging.sh

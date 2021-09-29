@@ -1,4 +1,41 @@
 packages:
+  manjaro:
+    packages:
+      - python-setuptools
+      - zlib
+      - openssh
+      - wget
+      - curl
+      - dnsmasq
+      - ebtables
+      - dmidecode
+      - vde2
+      - nmap
+      - ovmf
+      - patch
+      - psmisc
+      - libvirt
+      - bridge-utils
+      - jq
+      - unzip
+      - yarn
+      - cdrtools
+      - qemu
+      - libguestfs
+      - polkit
+        #- apache-tools
+      - openssl
+    pip3:
+     - kubernetes==17.17.0
+     - pyYAML
+     - virtualbmc
+     - lxml
+     - netaddr
+     - libvirt-python
+     - six
+     - docker-py
+     - jmespath
+     - passlib
   ubuntu:
     common:
       packages:

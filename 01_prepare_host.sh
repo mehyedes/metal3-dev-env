@@ -22,6 +22,8 @@ if [[ $OS == ubuntu ]]; then
     sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
   fi
 
+elif [[ $OS == manjaro ]]; then
+    sudo pacman -S --needed --noconfirm python-pip
 else
   sudo dnf -y install python3-pip
   sudo alternatives --set python /usr/bin/python3
@@ -200,7 +202,7 @@ function init_minikube() {
       # Loop to ignore minikube issues
       while /bin/true; do
         minikube_error=0
-        # Restart libvirtd.service as suggested here 
+        # Restart libvirtd.service as suggested here
         # https://github.com/kubernetes/minikube/issues/3566
         sudo systemctl restart libvirtd.service
         configure_minikube

@@ -47,15 +47,15 @@ source /etc/os-release
 export DISTRO="${ID}${VERSION_ID%.*}"
 export OS="${ID}"
 export OS_VERSION_ID=$VERSION_ID
-export SUPPORTED_DISTROS=(centos8 rhel8 ubuntu18 ubuntu20)
+export SUPPORTED_DISTROS=(centos8 manjaro rhel8 ubuntu18 ubuntu20)
 
 if [[ ! "${SUPPORTED_DISTROS[*]}" =~ $DISTRO ]]; then
-   echo "Supported OS distros for the host are: CentOS Stream 8 or RHEL8 or Ubuntu20.04"
+   echo "Supported OS distros for the host are: CentOS Stream 8 or RHEL8 or Ubuntu20.04 or Manjaro"
    exit 1
 fi
 
 # Container runtime
-if [[ "${OS}" == ubuntu ]]; then
+if [[ "${OS}" =~ (ubuntu|manjaro) ]]; then
   export CONTAINER_RUNTIME=${CONTAINER_RUNTIME:-"docker"}
 else
   export CONTAINER_RUNTIME=${CONTAINER_RUNTIME:-"podman"}
@@ -116,11 +116,13 @@ export CAPM3REPO="${CAPM3REPO:-https://github.com/${CAPM3_BASE_URL}}"
 
 export IPAMPATH="${IPAMPATH:-${M3PATH}/ip-address-manager}"
 export IPAM_BASE_URL="${IPAM_BASE_URL:-metal3-io/ip-address-manager}"
+# export IPAM_BASE_URL="${IPAM_BASE_URL:-Nordix/metal3-ipam}"
 export IPAMREPO="${IPAMREPO:-https://github.com/${IPAM_BASE_URL}}"
 
 if [ "${CAPI_VERSION}" == "v1alpha3" ]; then
   IPAMBRANCH="${IPAMBRANCH:-release-0.0}"
 else
+  # IPAMBRANCH="${IPAMBRANCH:-fix-api-leftover/furkat}"
   IPAMBRANCH="${IPAMBRANCH:-master}"
 fi
 
@@ -135,7 +137,9 @@ else
 fi
 
 BMOREPO="${BMOREPO:-https://github.com/metal3-io/baremetal-operator.git}"
+# BMOREPO="${BMOREPO:-https://github.com/kplimack/baremetal-operator.git}"
 BMOBRANCH="${BMOBRANCH:-master}"
+#BMOBRANCH="${BMOBRANCH:-update-webhooks}"
 FORCE_REPO_UPDATE="${FORCE_REPO_UPDATE:-true}"
 
 BMO_RUN_LOCAL="${BMO_RUN_LOCAL:-false}"
@@ -228,7 +232,7 @@ if [ "${KUBERNETES_VERSION}" == "v1.21.2" ]; then
   export KIND_NODE_IMAGE_VERSION="v1.21.2"
   # Minikube version (if EPHEMERAL_CLUSTER=minikube)
   export MINIKUBE_VERSION=${MINIKUBE_VERSION:-"v1.22.0"}
-else 
+else
   export KIND_NODE_IMAGE_VERSION=${KIND_NODE_IMAGE_VERSION:-"v1.22.0"}
   # Minikube version (if EPHEMERAL_CLUSTER=minikube)
   export MINIKUBE_VERSION=${MINIKUBE_VERSION:-"v1.23.2"}
@@ -419,7 +423,7 @@ differs(){
   return $RET_CODE
 }
 
-# If a given container with tag doesn't exist locally, pull it. 
+# If a given container with tag doesn't exist locally, pull it.
 # Otherwise, do nothing.
 # Helps conserve number of API calls to DockerHub to avoid hitting rate limit.
 #
@@ -428,7 +432,7 @@ differs(){
 #
 function container_image_pull_if_missing() {
   local IMAGE="$1"
-  if ! sudo "${CONTAINER_RUNTIME}" | grep -q "$IMAGE"; then
+  if ! sudo "${CONTAINER_RUNTIME}" images | grep -q "$IMAGE"; then
     sudo "${CONTAINER_RUNTIME}" pull "$IMAGE"
   fi
 }

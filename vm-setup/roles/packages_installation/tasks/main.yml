@@ -46,3 +46,20 @@
         state: present
   become: yes
   when: ansible_os_family == "RedHat"
+
+- name: Install packages on Manjaro
+  block:
+    - name: Install required packages for Manjaro
+      include_tasks: manjaro_required_packages.yml
+    - name: Install packages using standard package manager for Manjaro
+      package:
+        name: "{{ packages.manjaro.packages}}"
+        state: present
+      become: yes
+    - name: Install packages using pip3
+      pip:
+        executable: "pip"
+        name: "{{ packages.manjaro.pip3 }}"
+        state: present
+  become: yes
+  when: ansible_os_family == "Archlinux"

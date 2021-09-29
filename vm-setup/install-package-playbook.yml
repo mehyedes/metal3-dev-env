@@ -6,8 +6,8 @@
   tasks:
     - import_role:
         name: packages_installation
-    - import_role:
-        name: fubarhouse.golang
-      vars:
-        go_version: 1.16.7
-        go_install_clean: true
+          #    - import_role:
+          #        name: fubarhouse.golang
+          #      vars:
+          #        go_version: 1.16.7
+          #        go_install_clean: true
